@@ -1,6 +1,4 @@
-package org.serpinskitriangle;
-
-import org.jetbrains.annotations.NotNull;
+package org.barnsleyfern;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +13,10 @@ public class BarnsleyFern {
     }
 
     static class FernCanvas extends JComponent {
-        private static final int WIDTH = 800;
-        private static final int HEIGHT = 800;
+        private static final int WIDTH = 700;
+        private static final int HEIGHT = 700;
         private static final int NUM_POINTS = 50000;
-        private double x, y;
+        double x, y;
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -40,22 +38,42 @@ public class BarnsleyFern {
             g2.drawLine(screenX, screenY, screenX, screenY);
         }
 
+        double[] applyStem(double x, double y) {
+            return new double[]{0, 0.16 * y};
+        }
+
+        double[] applySuccessiveLeaf(double x, double y) {
+            return new double[]{0.85 * x + 0.04 * y, -0.04 * x + 0.85 * y + 1.6};
+        }
+
+        double[] applyLeftLeaf(double x, double y) {
+            return new double[]{0.2 * x - 0.26 * y, 0.23 * x + 0.22 * y + 1.6};
+        }
+
+        double[] applyRightLeaf(double x, double y) {
+            return new double[]{-0.15 * x + 0.28 * y, 0.26 * x + 0.24 * y + 0.44};
+        }
+
         private void nextPoint() {
             double nextX, nextY;
             double rnd = Math.random();
 
             if (rnd < 0.01) {
-                nextX = 0;
-                nextY = 0.16 * y;
+                double[] point = applyStem(x, y);
+                nextX = point[0];
+                nextY = point[1];
             } else if (rnd < 0.86) {
-                nextX = 0.85 * x + 0.04 * y;
-                nextY = -0.04 * x + 0.85 * y + 1.6;
+                double[] point = applySuccessiveLeaf(x, y);
+                nextX = point[0];
+                nextY = point[1];
             } else if (rnd < 0.93) {
-                nextX = 0.2 * x - 0.26 * y;
-                nextY = 0.23 * x + 0.22 * y + 1.6;
+                double[] point = applyLeftLeaf(x, y);
+                nextX = point[0];
+                nextY = point[1];
             } else {
-                nextX = -0.15 * x + 0.28 * y;
-                nextY = 0.26 * x + 0.24 * y + 0.44;
+                double[] point = applyRightLeaf(x, y);
+                nextX = point[0];
+                nextY = point[1];
             }
 
             x = nextX;
