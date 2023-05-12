@@ -79,6 +79,7 @@ public class BarnsleyFern {
             x = nextX;
             y = nextY;
         }
+
     }
 
 }
